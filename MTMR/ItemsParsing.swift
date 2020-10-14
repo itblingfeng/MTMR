@@ -267,6 +267,7 @@ enum ItemType: Decodable {
     case weather(interval: Double, units: String, api_key: String, icon_type: String)
     case yandexWeather(interval: Double)
     case currency(interval: Double, from: String, to: String, full: Bool)
+    case gp(interval: Double, code: String)
     case inputsource
     case music(interval: Double, disableMarquee: Bool)
     case group(items: [BarItemDefinition])
@@ -285,6 +286,7 @@ enum ItemType: Decodable {
         case refreshInterval
         case from
         case to
+        case code
         case full
         case timeZone
         case units
@@ -323,6 +325,7 @@ enum ItemType: Decodable {
         case weather
         case yandexWeather
         case currency
+        case gp
         case inputsource
         case music
         case group
@@ -392,7 +395,10 @@ enum ItemType: Decodable {
             let to = try container.decodeIfPresent(String.self, forKey: .to) ?? "USD"
             let full = try container.decodeIfPresent(Bool.self, forKey: .full) ?? false
             self = .currency(interval: interval, from: from, to: to, full: full)
-
+        case .gp:
+            let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 600.0
+            let code = try container.decodeIfPresent(String.self, forKey: .code) ?? "sh600596"
+            self = .gp(interval: interval, code: code)
         case .inputsource:
             self = .inputsource
 
@@ -436,7 +442,7 @@ enum ItemType: Decodable {
             let to = try container.decodeIfPresent(Double.self, forKey: .to) ?? 12 // Upper bounds of period of time in hours to search for events
             let maxToShow = try container.decodeIfPresent(Int.self, forKey: .maxToShow) ?? 3 // 1 indexed array.  Get the 1st, 2nd, 3rd event to display multiple notifications
             let autoResize = try container.decodeIfPresent(Bool.self, forKey: .autoResize) ?? false
-            let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 60.0
+        
             self = .upnext(from: from, to: to, maxToShow: maxToShow, autoResize: autoResize)
         }
     }

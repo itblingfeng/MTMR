@@ -41,6 +41,8 @@ extension ItemType {
             return "com.toxblh.mtmr.yandexWeather"
         case .currency(interval: _, from: _, to: _, full: _):
             return "com.toxblh.mtmr.currency"
+        case .gp(interval: _, code: _):
+            return "com.toxblh.mtmr.gp"
         case .inputsource:
             return "com.toxblh.mtmr.inputsource."
         case .music(interval: _):
@@ -300,6 +302,8 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
             barItem = YandexWeatherBarItem(identifier: identifier, interval: interval)
         case let .currency(interval: interval, from: from, to: to, full: full):
             barItem = CurrencyBarItem(identifier: identifier, interval: interval, from: from, to: to, full: full)
+        case let .gp(interval: interval, code: code):
+            barItem = GpBarItem(identifier: identifier, interval: interval, code: code)
         case .inputsource:
             barItem = InputSourceBarItem(identifier: identifier)
         case let .music(interval: interval, disableMarquee: disableMarquee):
